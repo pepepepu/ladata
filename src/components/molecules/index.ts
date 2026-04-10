@@ -1,1 +1,2 @@
-export { default as HeaderButtom } from "./HeaderButton";
+export { default as HeaderButton } from "./HeaderButton";
+export { default as PixelBlast } from "./PixelBlast";

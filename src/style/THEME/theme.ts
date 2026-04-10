@@ -2,6 +2,7 @@ const palette = {
   reallyBlack: "#111010ff",
   black: "#1C1717",
   dark: "#372F2F",
+  darkLight: "#3d3939",
   light: "#C6BEBE",
   white: "#E5E1E1",
 };
@@ -25,6 +26,7 @@ export const mediaQueries = {
 export const theme = {
   colors: {
     black: palette.black,
+    lighter: palette.darkLight,
     dark: palette.dark,
     light: palette.light,
     white: palette.white,

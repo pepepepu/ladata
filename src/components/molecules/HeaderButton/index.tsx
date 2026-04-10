@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect } from "react";
+import React, { useRef, useLayoutEffect, useState, useEffect } from "react";
 import { gsap } from "gsap";
 import { theme } from "../../../style/THEME/theme";
 import { Button, Text } from "../../atoms";
@@ -6,47 +6,56 @@ import { Button, Text } from "../../atoms";
 interface HeaderButtonProps {
   text: string;
   onClick: () => void;
+  isActive?: boolean;
 }
 
-const HeaderButton: React.FC<HeaderButtonProps> = ({ text, onClick }) => {
+const HeaderButton: React.FC<HeaderButtonProps> = ({
+  text,
+  onClick,
+  isActive = false,
+}) => {
   const text1Ref = useRef<HTMLDivElement>(null);
   const text2Ref = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const isBold = isActive || isHovered;
 
   useLayoutEffect(() => {
-    gsap.set(text2Ref.current, { yPercent: 100 });
+    gsap.set(text1Ref.current, { yPercent: isBold ? -100 : 0 });
+    gsap.set(text2Ref.current, { yPercent: isBold ? 0 : 100 });
   }, []);
 
-  const handleMouseEnter = () => {
-    gsap.to(text1Ref.current, {
-      yPercent: -100,
-      duration: 0.3,
-      ease: "power2.out",
-    });
-    gsap.to(text2Ref.current, {
-      yPercent: 0,
-      duration: 0.3,
-      ease: "power2.out",
-    });
-  };
-
-  const handleMouseLeave = () => {
-    gsap.to(text1Ref.current, {
-      yPercent: 0,
-      duration: 0.3,
-      ease: "power2.inOut",
-    });
-    gsap.to(text2Ref.current, {
-      yPercent: 100,
-      duration: 0.3,
-      ease: "power2.inOut",
-    });
-  };
+  useEffect(() => {
+    if (isBold) {
+      gsap.to(text1Ref.current, {
+        yPercent: -100,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+      gsap.to(text2Ref.current, {
+        yPercent: 0,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    } else {
+      gsap.to(text1Ref.current, {
+        yPercent: 0,
+        duration: 0.3,
+        ease: "power2.inOut",
+      });
+      gsap.to(text2Ref.current, {
+        yPercent: 100,
+        duration: 0.3,
+        ease: "power2.inOut",
+      });
+    }
+  }, [isBold]);
 
   return (
     <Button
       onClick={onClick}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       style={{
         backgroundColor: "transparent",
         border: "none",
